@@ -12,6 +12,7 @@
 		36642108215E862E000D05F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36642106215E862E000D05F4 /* Main.storyboard */; };
 		3664210A215E862F000D05F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36642109215E862F000D05F4 /* Assets.xcassets */; };
 		3664210D215E862F000D05F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3664210B215E862F000D05F4 /* LaunchScreen.storyboard */; };
+		36716B212162552C00BB2366 /* FontsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36716B202162552C00BB2366 /* FontsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		36642109215E862F000D05F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3664210C215E862F000D05F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3664210E215E862F000D05F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36716B202162552C00BB2366 /* FontsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,13 +57,22 @@
 			isa = PBXGroup;
 			children = (
 				36642102215E862E000D05F4 /* AppDelegate.swift */,
-				36642104215E862E000D05F4 /* ViewController.swift */,
+				36716B262162779300BB2366 /* Controllers */,
 				36642106215E862E000D05F4 /* Main.storyboard */,
 				36642109215E862F000D05F4 /* Assets.xcassets */,
 				3664210B215E862F000D05F4 /* LaunchScreen.storyboard */,
 				3664210E215E862F000D05F4 /* Info.plist */,
 			);
 			path = PostCards;
+			sourceTree = "<group>";
+		};
+		36716B262162779300BB2366 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				36642104215E862E000D05F4 /* ViewController.swift */,
+				36716B202162552C00BB2366 /* FontsTableViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36642105215E862E000D05F4 /* ViewController.swift in Sources */,
+				36716B212162552C00BB2366 /* FontsTableViewController.swift in Sources */,
 				36642103215E862E000D05F4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
