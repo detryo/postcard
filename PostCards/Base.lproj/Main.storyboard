@@ -55,7 +55,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ItP-Ew-3ey" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9zD-mx-o1O" secondAttribute="bottom" constant="75" id="37y-mV-zKi"/>
+                            <constraint firstItem="ItP-Ew-3ey" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9zD-mx-o1O" secondAttribute="bottom" priority="750" constant="75" id="37y-mV-zKi"/>
                             <constraint firstItem="9zD-mx-o1O" firstAttribute="leading" secondItem="3qb-gQ-3hh" secondAttribute="leading" constant="25" id="3mg-k8-S18"/>
                             <constraint firstItem="9zD-mx-o1O" firstAttribute="centerY" secondItem="D91-jz-i4U" secondAttribute="centerY" id="7c0-sP-vjs"/>
                             <constraint firstItem="9zD-mx-o1O" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3qb-gQ-3hh" secondAttribute="top" constant="75" id="D7b-NO-svR"/>
