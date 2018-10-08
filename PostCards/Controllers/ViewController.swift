@@ -71,23 +71,17 @@ class ViewController: UIViewController,
     }
     
     func renderPostCard(){
-        // 1 - Definir la zona de dibujo rectangular para trabajar 3000x2400
+        
         let drawRect = CGRect(x: 0, y: 0, width: 3000, height: 2400)
         
-        // 2 - Crear dos rectangulos para los dos textos de la postal
         let topRect = CGRect(x: 300, y: 200, width: 2400, height: 800)
         let bottomRect = CGRect(x: 300, y: 1800, width: 2400, height: 600)
         
-        // 3 - A partir d elos nombres de las fuentes crear dos objetos UIFont
-        // Dejaremos una fuente por defecto por si falla
         let topFont = UIFont(name: self.topFontName, size: 250) ?? UIFont.systemFont(ofSize: 240)
         let bottomFont = UIFont(name: self.bottomFontName, size: 120) ?? UIFont.systemFont(ofSize: 80)
-        
-        // 4 - NSMutableParagraphStyle para centrar el texto en la etiqueta
-        let centered = NSMutableParagraphStyle()
+                let centered = NSMutableParagraphStyle()
         centered.alignment = .center
         
-        // 5 - Definir la estructura de la etiqueta como el color y la fuente ( NSAttributedStringKey )
         let topAttributes : [NSAttributedString.Key : Any] =
             [
                 .foregroundColor        : topFontColor,
@@ -102,21 +96,16 @@ class ViewController: UIViewController,
                 .paragraphStyle         : centered
             ]
         
-        // 6 - Iniciar la renderizacion de la imagen ( UIGraphicsImageRender )
         let rendered = UIGraphicsImageRenderer(size: drawRect.size)
         
         self.postcardImageView.image = rendered.image(actions:
             { (context) in
                 
-            // 6.1 - Renderizar la zona con un fondo gris
                 UIColor.lightGray.set()
                 context.fill(drawRect)
                 
-            // 6.2 - Pintaremos la imagen seleccionada del usuario ( si hay alguna )
-            //       empezando por el borde superior izquierdo
                 self.image?.draw(at: CGPoint(x: 0, y: 0))
                 
-            // 6.3 - Pinatr las dos etiquetas de texto con los dos parametros configurados en el punto 5
                 self.topText.draw(in: topRect, withAttributes: topAttributes)
                 self.bottomText.draw(in: bottomRect, withAttributes: bottomAttributes)
         })
@@ -146,12 +135,29 @@ class ViewController: UIViewController,
         let dropLocation = session.location(in: self.postcardImageView)
         
         if session.hasItemsConforming(toTypeIdentifiers: [kUTTypePlainText as String]) {
-            // Se ejecutara si lo que hemos soltado es un String
+            session.loadObjects(ofClass: NSString.self) { (items) in
+                guard let fontName = items.first as? String else { return }
+                
+                if dropLocation.y < self.postcardImageView.bounds.midY {
+                    self.topFontName = fontName
+                } else {
+                    self.bottomFontName = fontName
+                }
+                self.renderPostCard()
+            }
         }else if session.hasItemsConforming(toTypeIdentifiers: [kUTTypeImage as String]) {
             // Se ejecutara si lo que hemos soltado es una imagen
         }else {
-            // Se ejecutara si lo que hemos soltado es un color
-        }
+            session.loadObjects(ofClass: UIColor.self) { (items) in
+                guard let color = items.first as? UIColor else { return }
+                
+                if dropLocation.y < self.postcardImageView.bounds.midY{
+                    self.topFontColor = color
+                } else {
+                    self.bottomFontColor = color
+                }
+                self.renderPostCard()
+            }}
     }
 }
 
