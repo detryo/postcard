@@ -13,7 +13,8 @@ class ViewController: UIViewController,
                       UICollectionViewDataSource,
                       UICollectionViewDelegate,
                       UICollectionViewDragDelegate,
-                      UIDropInteractionDelegate{
+                      UIDropInteractionDelegate,
+                      UIDragInteractionDelegate{
     
     @IBOutlet weak var postcardImageView: UIImageView!
     @IBOutlet weak var colorCollectionView: UICollectionView!
@@ -47,6 +48,12 @@ class ViewController: UIViewController,
         self.postcardImageView.isUserInteractionEnabled = true
         let dropInteraction = UIDropInteraction(delegate: self)
         self.postcardImageView.addInteraction(dropInteraction)
+        
+        let dragInteraction = UIDragInteraction(delegate: self)
+        self.postcardImageView.addInteraction(dragInteraction)
+        
+        self.title = "PostCard"
+        splitViewController?.view.backgroundColor = UIColor.black
     }
     
     // Mark: Collection View Data Source
@@ -146,7 +153,13 @@ class ViewController: UIViewController,
                 self.renderPostCard()
             }
         }else if session.hasItemsConforming(toTypeIdentifiers: [kUTTypeImage as String]) {
-            // Se ejecutara si lo que hemos soltado es una imagen
+            session.loadObjects(ofClass: UIImage.self)
+            { (items) in
+                guard let image = items.first as? UIImage else { return }
+                
+                self.image = self.resizeImage(image: image, targetSize: CGSize(width: 3000, height: 2400))
+                self.renderPostCard()
+            }
         }else {
             session.loadObjects(ofClass: UIColor.self) { (items) in
                 guard let color = items.first as? UIColor else { return }
@@ -159,5 +172,70 @@ class ViewController: UIViewController,
                 self.renderPostCard()
             }}
     }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        
+        let originalSize = image.size
+        let withRatio = targetSize.width / originalSize.width
+        let heightRatio = targetSize.height / originalSize.height
+        let targetRatio = max(withRatio, heightRatio)
+        let newSize = CGSize(width: originalSize.width * targetRatio,
+                             height: originalSize.height * targetRatio)
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    
+    // MARK: UIDragInteractionDelegate
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        
+        guard let image = self.postcardImageView.image else { return [] }
+        let provider = NSItemProvider(object: image)
+        let item = UIDragItem(itemProvider: provider)
+        return [item]
+    }
+    
+    // MARK: Tap Gesture Recognizer
+    @IBAction func changeText(_ sender: UITapGestureRecognizer) {
+        
+        let tapLocation = sender.location(in: self.postcardImageView)
+        
+        let changeTop = (tapLocation.y < self.postcardImageView.bounds.midY) ? true : false
+        
+        let alert = UIAlertController(title: "Change Text", message: "Write new text", preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "What do you want to put here?"
+            
+            if changeTop {
+                textField.text = self.topText
+            } else {
+                textField.text = self.bottomText
+            }
+        }
+        
+        let changeAction = UIAlertAction(title: "Change text", style: .default)
+        { (_) in
+            guard let newText = alert.textFields?[0].text else { return }
+            
+            if changeTop {
+                self.topText = newText
+            } else {
+                self.bottomText = newText
+            }
+            self.renderPostCard()
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(changeAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
+
 
